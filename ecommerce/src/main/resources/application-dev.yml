@@ -1,0 +1,51 @@
+spring:
+   datasource:
+      url: jdbc:postgresql://localhost:5432/shop
+      username: username
+      password: password
+      driver-class-name: org.postgresql.Driver
+   jpa:
+      hibernate:
+         ddl-auto: create-drop
+      show-sql: true
+      properties:
+         format_sql: true
+      database: postgresql
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+   mail:
+      host: localhost
+      port: 1025
+      username: tm
+      password: tm
+      properties:
+         mail:
+            smtp:
+               trust: "*"
+            auth: true
+            starttls:
+               enabled: true
+            connectiontimeout: 5000
+            timeout: 3000
+            writetimeout: 5000
+
+application:
+   security:
+      jwt:
+         secret-key: 00db0c75f418132140e2091115ef785c4ccfc0ae418ddeec5c225013b7b643cd425aa3cecef585462cd39c1f2f450f00e73357660ce39057ab0e1da84ae5e6bb
+         expiration: 86400000
+         refresh-token:
+            expiration: 604800000
+   mailing:
+      frontend:
+         activation-url: http://localhost:4200/activate-account
+
+token:
+   expiration-minutes: 15
+   chars: 0123456789
+
+server:
+   port: 8088
+
+logging:
+   level:
+      org.springframework.security: TRACE
