@@ -14,6 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@ToString
 public class Permission {
 
     @Id
@@ -22,7 +23,7 @@ public class Permission {
 
     private String name;
 
-    @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "permissions", fetch = FetchType.EAGER)
     private Set<Role> roles;
 
 }
