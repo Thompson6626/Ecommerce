@@ -23,7 +23,7 @@ public class Permission {
 
     private String name;
 
-    @ManyToMany(mappedBy = "permissions", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
     private Set<Role> roles;
 
 }

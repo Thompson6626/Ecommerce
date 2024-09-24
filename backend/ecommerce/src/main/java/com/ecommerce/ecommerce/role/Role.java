@@ -11,7 +11,6 @@ import lombok.ToString;
 
 import com.ecommerce.ecommerce.user.User;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -30,7 +29,7 @@ public class Role {
     @Column(nullable=false, unique=true)
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "role_permissions",
             joinColumns = @JoinColumn(name = "role_id"),
@@ -38,6 +37,6 @@ public class Role {
     )
     private Set<Permission> permissions;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<User> users;
 }
