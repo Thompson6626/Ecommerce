@@ -1,19 +1,24 @@
-# Workspace
-.idx
-.vscode
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
-# Gradle
-HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
 
 # Node
 /node_modules
 npm-debug.log
 yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
 # Visual Studio Code
 .vscode/*
@@ -22,7 +27,6 @@ yarn-error.log
 !.vscode/launch.json
 !.vscode/extensions.json
 .history/*
-
 
 # Miscellaneous
 /.angular/cache
@@ -33,9 +37,6 @@ yarn-error.log
 testem.log
 /typings
 
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
-
+# System files
+.DS_Store
+Thumbs.db
