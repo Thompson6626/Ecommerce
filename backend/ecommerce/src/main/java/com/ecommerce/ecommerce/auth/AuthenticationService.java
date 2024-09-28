@@ -3,6 +3,7 @@ package com.ecommerce.ecommerce.auth;
 import com.ecommerce.ecommerce.email.EmailService;
 import com.ecommerce.ecommerce.email.EmailTemplateName;
 import com.ecommerce.ecommerce.exceptions.EmailAlreadyAssociatedWithAccount;
+import com.ecommerce.ecommerce.exceptions.PasswordConfirmationNotEqualToPasswordException;
 import com.ecommerce.ecommerce.exceptions.RoleNotFoundException;
 import com.ecommerce.ecommerce.exceptions.TokenHasExpiredException;
 import com.ecommerce.ecommerce.exceptions.UserNotFoundException;
@@ -13,6 +14,7 @@ import com.ecommerce.ecommerce.token.Token;
 import com.ecommerce.ecommerce.token.TokenRepository;
 import com.ecommerce.ecommerce.user.User;
 import com.ecommerce.ecommerce.user.UserRepository;
+
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -47,8 +50,12 @@ public class AuthenticationService {
     private String chars;
 
     public void register(RegistrationRequest request) throws MessagingException {
-        Role userRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> new RoleNotFoundException("USER")); // Adjust the role name as necessary
+        Role userRole = roleRepository.findByName("ROLE_USER")
+                .orElseThrow(() -> new RoleNotFoundException("ROLE_USER")); // Adjust the role name as necessary
+
+        if(!request.getConfirmPassword().equals(request.getPassword())){
+            throw new PasswordConfirmationNotEqualToPasswordException();
+        }
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()){
             throw new EmailAlreadyAssociatedWithAccount();
@@ -61,7 +68,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .accountLocked(false)
                 .enabled(false)
-                .role(userRole)
+                .roles(List.of(userRole))
                 .build();
 
         userRepository.save(user);

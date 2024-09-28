@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 import lombok.*;
 
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,16 +14,15 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@ToString
-public class Permission {
+public class Privilege  {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
 
-    @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
-    private Set<Role> roles;
+    @ManyToMany(mappedBy = "privileges")
+    private List<Role> roles;
 
 }
