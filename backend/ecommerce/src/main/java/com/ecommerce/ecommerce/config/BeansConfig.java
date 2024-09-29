@@ -3,6 +3,7 @@ package com.ecommerce.ecommerce.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -19,6 +20,8 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import com.ecommerce.ecommerce.user.User;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -59,6 +62,10 @@ public class BeansConfig {
         var expressionHandler = new DefaultWebSecurityExpressionHandler();
         expressionHandler.setRoleHierarchy(roleHierarchy());
         return expressionHandler;
+    }
+    @Bean
+    public AuditorAware<User> auditorProvider() {
+        return new SpringSecurityAuditorAware();
     }
 
     @Bean

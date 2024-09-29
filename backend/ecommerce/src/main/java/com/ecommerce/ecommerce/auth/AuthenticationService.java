@@ -3,6 +3,7 @@ package com.ecommerce.ecommerce.auth;
 import com.ecommerce.ecommerce.email.EmailService;
 import com.ecommerce.ecommerce.email.EmailTemplateName;
 import com.ecommerce.ecommerce.exceptions.EmailAlreadyAssociatedWithAccount;
+import com.ecommerce.ecommerce.exceptions.Identifier;
 import com.ecommerce.ecommerce.exceptions.PasswordConfirmationNotEqualToPasswordException;
 import com.ecommerce.ecommerce.exceptions.RoleNotFoundException;
 import com.ecommerce.ecommerce.exceptions.TokenHasExpiredException;
@@ -129,7 +130,7 @@ public class AuthenticationService {
         var id = savedToken.getUser().getId();
 
         var user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(0,id));
+                .orElseThrow(() -> new UserNotFoundException(Identifier.ID,id));
 
         user.setEnabled(true);
         userRepository.save(user);

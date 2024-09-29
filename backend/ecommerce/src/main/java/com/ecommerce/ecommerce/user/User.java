@@ -1,14 +1,20 @@
 package com.ecommerce.ecommerce.user;
 
 import com.ecommerce.ecommerce.permission.Privilege;
+import com.ecommerce.ecommerce.review.Review;
 import com.ecommerce.ecommerce.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,6 +27,7 @@ import java.util.List;
 @Entity
 @ToString
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 public class User implements Principal, UserDetails {
 
     @Id
@@ -43,6 +50,10 @@ public class User implements Principal, UserDetails {
     private boolean accountLocked;
     private boolean enabled;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Review> reviews;
+
+
     @ManyToMany 
     @JoinTable( 
         name = "users_roles", 
@@ -51,6 +62,13 @@ public class User implements Principal, UserDetails {
         inverseJoinColumns = @JoinColumn(
           name = "role_id", referencedColumnName = "id")) 
     private Collection<Role> roles;
+
+    @CreatedDate
+    @Column(nullable = false , updatable = false)
+    private LocalDateTime createdDate;
+    @LastModifiedDate
+    @Column(insertable = false)
+    private LocalDateTime lastModifiedDate;
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

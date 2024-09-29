@@ -24,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 public class SetupDataLoader implements
   ApplicationListener<ContextRefreshedEvent> {
 
+    
+
     boolean alreadySetup = false;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
