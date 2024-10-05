@@ -1,9 +1,12 @@
 spring:
    profiles:
       active: dev
+   config:
+      import: optional:file:.env[.properties]
 
 springdoc:
    default-produces-media-type: application/json
 server:
    servlet:
       context-path: /api/v1/
+

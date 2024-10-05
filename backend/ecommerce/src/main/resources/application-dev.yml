@@ -1,8 +1,9 @@
 spring:
    datasource:
-      url: jdbc:postgresql://localhost:5432/shop
-      username: username
-      password: password
+      # shop
+      url: ${DATABASE_URL}
+      username: ${DATABASE_USERNAME}
+      password: ${DATABASE_PASSWORD}
       driver-class-name: org.postgresql.Driver
    jpa:
       hibernate:
@@ -31,7 +32,7 @@ spring:
 application:
    security:
       jwt:
-         secret-key: 00db0c75f418132140e2091115ef785c4ccfc0ae418ddeec5c225013b7b643cd425aa3cecef585462cd39c1f2f450f00e73357660ce39057ab0e1da84ae5e6bb
+         secret-key: ${JWT_SECRET_KEY}
          expiration: 86400000
          refresh-token:
             expiration: 604800000
@@ -42,6 +43,10 @@ application:
 token:
    expiration-minutes: 15
    chars: 0123456789
+
+stripe:
+   public-key: ${STRIPE_PUBLIC_KEY}
+   secret-key: ${STRIPE_SECRET_KEY}
 
 server:
    port: 8088

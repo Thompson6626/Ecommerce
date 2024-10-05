@@ -1,10 +1,10 @@
 package com.ecommerce.ecommerce.exceptions;
 
 
-public class RoleNotFoundException extends RuntimeException{
+public class RoleNotFoundException extends NotFoundException {
 
-    public RoleNotFoundException(String name) {
-        super(String.format("Role with name %s not found", name));
+    public RoleNotFoundException(Identifier identifier,Object variable){
+        super("Role",identifier,variable);
     }
 }
 

@@ -1,23 +1,20 @@
 package com.ecommerce.ecommerce.product;
 
-import com.ecommerce.ecommerce.category.Category;
+import com.ecommerce.ecommerce.product.category.Category;
 import com.ecommerce.ecommerce.review.Review;
+import com.ecommerce.ecommerce.order.orderItem.OrderItem;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Transient;
+import com.ecommerce.ecommerce.user.User;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.DoubleStream;
 
 @Getter
 @Setter
@@ -33,7 +30,7 @@ public class Product {
 
     private String name;
     private String description;
-    private Double price;
+    private BigDecimal price;
     private String imageUrl;
     private Integer stock; 
     private Double rating;
@@ -41,21 +38,28 @@ public class Product {
     @ManyToOne
     private Category category;
 
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<Review> reviews; 
+    private List<Review> reviews;
 
+    @OneToMany(mappedBy = "product")
+    private List<OrderItem> orderItems;
+
+    @ManyToOne
+    @JoinColumn(name = "seller_id", nullable = false)
+    private User seller;
+
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
     @Transient
     public double getRate() {
         if (this.reviews == null || this.reviews.isEmpty()) {
             return 0.0;
         }
-        var rate = this.reviews.stream()
+        var rate = this.reviews.stream().parallel()
                 .mapToDouble(Review::getRating)
                 .average()
                 .orElse(0.0);
-        double roundedRate = Math.round(rate * 10.0) / 10.0;
 
-        return roundedRate;
+        return Math.round(rate * 10.0) / 10.0;
     }
 }

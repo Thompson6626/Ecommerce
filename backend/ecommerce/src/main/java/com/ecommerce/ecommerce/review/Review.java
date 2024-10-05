@@ -49,14 +49,12 @@ public class Review {
     @CreatedBy
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @Column(nullable = false, updatable = false)
-    private User createdBy; 
+    private User createdBy;
 
     @LastModifiedBy
     @ManyToOne  
     @JoinColumn(name = "modified_by_user_id")
-    @Column(insertable = false)
-    private User modifiedBy;  
+    private User modifiedBy;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

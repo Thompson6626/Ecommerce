@@ -1,12 +1,14 @@
 package com.ecommerce.ecommerce.utils;
 
-
-import org.springframework.data.domain.Page;
-
 import com.ecommerce.ecommerce.common.PageResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Utils {
     public static <T, R> PageResponse<R> generatePageResponse(
@@ -15,7 +17,7 @@ public class Utils {
             ){
         List<R> mapped = page.stream()
                 .map(mapper)
-                .toList() ;
+                .collect(Collectors.toList());
 
         return PageResponse.<R>builder()
                 .content(mapped)
@@ -26,5 +28,18 @@ public class Utils {
                 .first(page.isFirst())
                 .last(page.isLast())
                 .build();
+    }
+
+    public static Pageable pageableSortedBy(
+            int page,
+            int size,
+            String sorter,
+            boolean ascending
+    ){
+        return PageRequest.of(
+                page,
+                size,
+                ascending ? Sort.by(sorter): Sort.by(sorter).descending()
+        );
     }
 }

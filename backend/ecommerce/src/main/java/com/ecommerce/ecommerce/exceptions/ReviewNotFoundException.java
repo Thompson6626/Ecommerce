@@ -1,12 +1,8 @@
 package com.ecommerce.ecommerce.exceptions;
 
-public class ReviewNotFoundException extends RuntimeException{
 
+public class ReviewNotFoundException extends NotFoundException {
     public ReviewNotFoundException(Identifier identifier,Object variable){
-        super(String.format(
-            "Review not found using identifier '%s'; attempted to find '%s'.",
-            identifier.toString(),
-            variable.toString()
-    ));
+        super("Review",identifier,variable);
     }
 }

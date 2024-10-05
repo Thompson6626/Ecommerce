@@ -33,7 +33,7 @@ public class BeansConfig {
     private final UserDetailsService userDetailsService;
     @Bean
     public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        var authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
@@ -54,8 +54,7 @@ public class BeansConfig {
     @Bean
     public RoleHierarchy roleHierarchy() {
         var hierarchy = "ROLE_ADMIN > ROLE_SELLER \n ROLE_SELLER > ROLE_BUYER";
-        var roleHierarchy = RoleHierarchyImpl.fromHierarchy(hierarchy);
-        return roleHierarchy;
+        return RoleHierarchyImpl.fromHierarchy(hierarchy);
     }
     @Bean
     public DefaultWebSecurityExpressionHandler customWebSecurityExpressionHandler() {
@@ -64,7 +63,7 @@ public class BeansConfig {
         return expressionHandler;
     }
     @Bean
-    public AuditorAware<User> auditorProvider() {
+    public AuditorAware<User> auditorAware() {
         return new SpringSecurityAuditorAware();
     }
 

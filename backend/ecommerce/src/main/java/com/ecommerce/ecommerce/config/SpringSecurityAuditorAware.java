@@ -14,7 +14,10 @@ public class SpringSecurityAuditorAware implements AuditorAware<User>{
     @Override
     public Optional<User> getCurrentAuditor() {
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
-            .filter(auth -> auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken))
+            .filter(auth ->
+                    auth.isAuthenticated() &&
+                    !(auth instanceof AnonymousAuthenticationToken)
+            )
             .map(Authentication::getPrincipal)
             .filter(User.class::isInstance)  
             .map(User.class::cast);

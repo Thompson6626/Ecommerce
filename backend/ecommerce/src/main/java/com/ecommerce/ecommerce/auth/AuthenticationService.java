@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class AuthenticationService {
 
     public void register(RegistrationRequest request) throws MessagingException {
         Role userRole = roleRepository.findByName("ROLE_USER")
-                .orElseThrow(() -> new RoleNotFoundException("ROLE_USER")); // Adjust the role name as necessary
+                .orElseThrow(() -> new RoleNotFoundException(Identifier.NAME,"ROLE_USER")); // Adjust the role name as necessary
 
         if(!request.getConfirmPassword().equals(request.getPassword())){
             throw new PasswordConfirmationNotEqualToPasswordException();
@@ -69,7 +70,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .accountLocked(false)
                 .enabled(false)
-                .roles(List.of(userRole))
+                .roles(new ArrayList<>(List.of(userRole)))
                 .build();
 
         userRepository.save(user);
@@ -123,6 +124,7 @@ public class AuthenticationService {
     public void activateAccount(String token) throws MessagingException {
         Token savedToken = tokenRepository.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token."));
+
         if (LocalDateTime.now().isAfter(savedToken.getExpiresAt())){
             sendValidationEmail(savedToken.getUser());
             throw new TokenHasExpiredException("New token has been sent.");

@@ -6,10 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.ecommerce.ecommerce.category.Category;
+import com.ecommerce.ecommerce.product.category.Category;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface ProductRepository extends JpaRepository<Product , Integer>{
+public interface ProductRepository extends JpaRepository<Product , Integer>, JpaSpecificationExecutor<Product> {
 
     Optional<Product> findByName(String name);
-    Page<Product> findByCategory(Category category, Pageable pageable);
+    Page<Product> findByStatus(ProductStatus status, Pageable pageable);
 }

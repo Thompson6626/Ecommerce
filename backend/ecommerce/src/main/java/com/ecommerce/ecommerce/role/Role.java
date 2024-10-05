@@ -1,6 +1,6 @@
 package com.ecommerce.ecommerce.role;
 
-import com.ecommerce.ecommerce.permission.Privilege;
+import com.ecommerce.ecommerce.privilege.Privilege;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,9 +35,14 @@ public class Role {
     @JoinTable(
         name = "roles_privileges", 
         joinColumns = @JoinColumn(
-          name = "role_id", referencedColumnName = "id"), 
+                name = "role_id",
+                referencedColumnName = "id"
+        ),
         inverseJoinColumns = @JoinColumn(
-          name = "privilege_id", referencedColumnName = "id"))
+                name = "privilege_id",
+                referencedColumnName = "id"
+        )
+    )
     private Collection<Privilege> privileges;
 
     @ManyToMany(mappedBy = "roles")

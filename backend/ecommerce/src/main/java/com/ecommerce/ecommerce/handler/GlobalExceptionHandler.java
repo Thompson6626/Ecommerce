@@ -1,6 +1,10 @@
 package com.ecommerce.ecommerce.handler;
 
+import com.ecommerce.ecommerce.exceptions.IncorrectPasswordException;
+import com.ecommerce.ecommerce.exceptions.NewPasswordDoesNotMatchException;
+import com.ecommerce.ecommerce.exceptions.UnauthorizedModificationException;
 import jakarta.mail.MessagingException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -8,9 +12,6 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.ecommerce.ecommerce.exceptions.IncorrectPasswordException;
-import com.ecommerce.ecommerce.exceptions.NewPasswordDoesNotMatchException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -93,6 +94,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(BAD_REQUEST).body(
                 ExceptionResponse.builder()
                         .validationErrors(errors)
+                        .build()
+        );
+    }
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleException(EntityNotFoundException exp) {
+        return ResponseEntity.status(NOT_FOUND).body(
+                ExceptionResponse.builder()
+                        .error(exp.getMessage())
+                        .build()
+        );
+    }
+    @ExceptionHandler(UnauthorizedModificationException.class)
+    public ResponseEntity<ExceptionResponse> handleUnauthorizedModificationException(UnauthorizedModificationException exp) {
+        return ResponseEntity.status(FORBIDDEN).body(
+                ExceptionResponse.builder()
+                        .error(exp.getMessage())
                         .build()
         );
     }

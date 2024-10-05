@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.review;
 
-import org.springframework.web.bind.annotation.RestController;
+import com.ecommerce.ecommerce.review.dto.ReviewResponse;
+import org.springframework.web.bind.annotation.*;
 
 import com.ecommerce.ecommerce.review.dto.ReviewRequest;
 import com.ecommerce.ecommerce.review.dto.ReviewUpdateRequest;
@@ -9,16 +10,9 @@ import com.ecommerce.ecommerce.user.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
 
 
 @RestController
@@ -29,23 +23,30 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<?> postReview(
+    public ResponseEntity<ReviewResponse> postReview(
         @Valid @RequestBody ReviewRequest request
     ){
-        reviewService.postReview(request);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        var response = reviewService.postReview(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     } 
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateReview(
+    public ResponseEntity<ReviewResponse> updateReview(
         @PathVariable(name = "id") int id, 
-        @RequestBody ReviewUpdateRequest request,
+        @Valid @RequestBody ReviewUpdateRequest request,
         @AuthenticationPrincipal User connectedUser
     ) {
-        reviewService.updateReview(id,request,connectedUser);
-        return ResponseEntity.ok().build();
+        var response = reviewService.updateReview(id,request,connectedUser);
+        return ResponseEntity.ok().body(response);
     }
 
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteReview(
+            @PathVariable(name = "id") int id,
+            @AuthenticationPrincipal User connectedUser
+    ){
+        reviewService.deleteReview(id,connectedUser);
+        return ResponseEntity.noContent().build();
+    }
 
 }

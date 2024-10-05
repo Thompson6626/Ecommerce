@@ -1,6 +1,8 @@
 package com.ecommerce.ecommerce.user;
 
-import com.ecommerce.ecommerce.permission.Privilege;
+import com.ecommerce.ecommerce.order.Order;
+import com.ecommerce.ecommerce.privilege.Privilege;
+import com.ecommerce.ecommerce.product.Product;
 import com.ecommerce.ecommerce.review.Review;
 import com.ecommerce.ecommerce.role.Role;
 import jakarta.persistence.*;
@@ -41,26 +43,30 @@ public class User implements Principal, UserDetails {
     private String email;
     private String password;
 
-    private String mobileNumber;
-    private String address;
-    private String city;
-    private String state;
-    private String pincode;
-
     private boolean accountLocked;
     private boolean enabled;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    private List<Product> products;
 
     @ManyToMany 
     @JoinTable( 
         name = "users_roles", 
         joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id"), 
+                name = "user_id",
+                referencedColumnName = "id"
+        ),
         inverseJoinColumns = @JoinColumn(
-          name = "role_id", referencedColumnName = "id")) 
+                name = "role_id",
+                referencedColumnName = "id"
+        )
+    )
     private Collection<Role> roles;
 
     @CreatedDate

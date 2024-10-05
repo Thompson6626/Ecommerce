@@ -2,17 +2,16 @@ package com.ecommerce.ecommerce.product.dto;
 
 import lombok.*;
 
+import java.math.BigDecimal;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Builder
-public class ProductShowcase {
+public record ProductShowcase(
+        Integer id,
+        String name,
+        BigDecimal price,
+        String imageUrl,
+        Double rating
+){
 
-    private Integer id;
-    private String name;
-    private Double price;
-    private String imageUrl;
-    private Double rating;
 }

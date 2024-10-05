@@ -1,15 +1,17 @@
 package com.ecommerce.ecommerce.review;
 
+import com.ecommerce.ecommerce.exceptions.*;
+import com.ecommerce.ecommerce.review.dto.ReviewResponse;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import com.ecommerce.ecommerce.exceptions.ReviewNotFoundException;
 import com.ecommerce.ecommerce.product.ProductRepository;
 import com.ecommerce.ecommerce.review.dto.ReviewRequest;
 import com.ecommerce.ecommerce.review.dto.ReviewUpdateRequest;
 import com.ecommerce.ecommerce.user.User;
-import com.ecommerce.ecommerce.exceptions.Identifier;
-import com.ecommerce.ecommerce.exceptions.ProductNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,8 +23,8 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
     private final ProductRepository productRepository;
 
-    public void postReview(ReviewRequest request){
-        var review = reviewMapper.toEntity(request);
+    public ReviewResponse postReview(ReviewRequest request){
+        Review review = reviewMapper.toEntity(request);
 
         var product = productRepository.findById(request.productId())
                         .orElseThrow(() -> new ProductNotFoundException(
@@ -32,24 +34,51 @@ public class ReviewService {
 
         review.setProduct(product);
 
-        reviewRepository.save(review);
+        review = reviewRepository.save(review);
+
+        return reviewMapper.toResponse(review);
     }
-    public void updateReview(
+    public ReviewResponse updateReview(
         int reviewId,
         ReviewUpdateRequest request,
         User connectedUser
         ){
-            
-        var review = reviewRepository.findById(reviewId)
+
+        if(connectedUser == null) return ReviewResponse.builder().build();
+
+        Review review = reviewRepository.findById(reviewId)
                         .orElseThrow(() -> new ReviewNotFoundException(
                                             Identifier.ID, 
                                             reviewId)
                                         );
 
+        if(!connectedUser.getId().equals(review.getCreatedBy().getId())){
+            throw new UnauthorizedModificationException("Cannot modify other user's reviews");
+        }
+
         review.setComment(request.comment());
         review.setRating(request.rating());
 
-        reviewRepository.save(review);
+        review = reviewRepository.save(review);
+
+        return reviewMapper.toResponse(review);
     }
 
+    public void deleteReview(int reviewId, User connectedUser) {
+        if(connectedUser == null) return;
+
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewNotFoundException(
+                        Identifier.ID,
+                        reviewId)
+                );
+
+        // If the id its not the same or the user doesnt have admin role
+        if(!connectedUser.getId().equals(review.getCreatedBy().getId()) ||
+            connectedUser.getRoles().stream().noneMatch(e -> e.getName().equals("ROLE_ADMIN"))
+        ){
+            throw new UnauthorizedModificationException("Cannot delete other user's reviews");
+        }
+        reviewRepository.deleteById(reviewId);
+    }
 }

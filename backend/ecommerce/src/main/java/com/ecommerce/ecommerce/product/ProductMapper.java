@@ -1,9 +1,12 @@
 package com.ecommerce.ecommerce.product;
 
+import com.ecommerce.ecommerce.product.dto.ProductRequest;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.ecommerce.product.dto.ProductDisplay;
 import com.ecommerce.ecommerce.product.dto.ProductShowcase;
+
+import java.math.BigDecimal;
 
 @Service
 public class ProductMapper {
@@ -30,6 +33,16 @@ public class ProductMapper {
                 .build();
     }
 
+    public Product toProduct(ProductRequest request){
+        return Product.builder()
+                .name(request.name())
+                .price(request.price())
+                .stock(request.stock())
+                .imageUrl(request.imageUrl())
+                .description(request.description())
+                .status(ProductStatus.PENDING)
+                .build();
+    }
 
 
 

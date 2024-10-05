@@ -31,7 +31,8 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
-	
+	// https://mvnrepository.com/artifact/com.stripe/stripe-java
+	implementation 'com.stripe:stripe-java:27.1.0'
 	//mplementation 'org.flywaydb:flyway-core'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
