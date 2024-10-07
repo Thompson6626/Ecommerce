@@ -12,6 +12,12 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import com.stripe.exception.StripeException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.ApiConnectionException;
+import com.stripe.exception.ApiException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -84,6 +90,7 @@ public class GlobalExceptionHandler {
         );
     }
 
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleException(MethodArgumentNotValidException exp){
         Set<String> errors = new HashSet<>();
@@ -113,6 +120,60 @@ public class GlobalExceptionHandler {
                         .build()
         );
     }
+    @ExceptionHandler(CardException.class)
+    public ResponseEntity<ExceptionResponse> handleCardException(CardException exp) {
+        return ResponseEntity.status(BAD_REQUEST).body(
+                ExceptionResponse.builder()
+                        .error(exp.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidRequestException(InvalidRequestException exp) {
+        return ResponseEntity.status(BAD_REQUEST).body(
+                ExceptionResponse.builder()
+                        .error(exp.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ExceptionResponse> handleAuthenticationException(AuthenticationException exp) {
+        return ResponseEntity.status(UNAUTHORIZED).body(
+                ExceptionResponse.builder()
+                        .error(exp.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(ApiConnectionException.class)
+    public ResponseEntity<ExceptionResponse> handleApiConnectionException(ApiConnectionException exp) {
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(
+                ExceptionResponse.builder()
+                        .error(exp.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ExceptionResponse> handleApiException(ApiException exp) {
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(
+                ExceptionResponse.builder()
+                        .error(exp.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(StripeException.class)
+    public ResponseEntity<ExceptionResponse> handleStripeException(StripeException exp) {
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(
+                ExceptionResponse.builder()
+                        .error(exp.getMessage())
+                        .build()
+        );
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception exp){

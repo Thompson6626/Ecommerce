@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
 import com.ecommerce.ecommerce.user.User;
 
-import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -31,7 +33,7 @@ public class Role {
     @Column(nullable=false, unique=true)
     private String name;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "roles_privileges", 
         joinColumns = @JoinColumn(
@@ -43,8 +45,17 @@ public class Role {
                 referencedColumnName = "id"
         )
     )
-    private Collection<Privilege> privileges;
+    private List<Privilege> privileges;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER)
     private Set<User> users;
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", privileges=" + privileges.stream().map(Privilege::getName).collect(Collectors.toList()) + 
+                '}';
+    }
 }

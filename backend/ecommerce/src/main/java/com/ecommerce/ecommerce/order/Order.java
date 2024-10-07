@@ -38,6 +38,7 @@ public class Order {
     @CreatedDate
     @Column(nullable = false , updatable = false)
     private LocalDate orderDate;
+    
     private BigDecimal totalPrice;
 
     @Transient
@@ -49,7 +50,7 @@ public class Order {
 
         return this.orderItems.stream()
                 .map(OrderItem::getBatchPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add); // Sum up using BigDecimal::add
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void cancelOrder() {

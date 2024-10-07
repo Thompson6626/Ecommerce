@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.ecommerce.ecommerce.product.category.Category;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface ProductRepository extends JpaRepository<Product , Integer>, JpaSpecificationExecutor<Product> {

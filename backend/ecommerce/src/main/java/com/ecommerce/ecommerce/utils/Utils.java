@@ -9,6 +9,8 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Utils {
     public static <T, R> PageResponse<R> generatePageResponse(
@@ -42,4 +44,10 @@ public class Utils {
                 ascending ? Sort.by(sorter): Sort.by(sorter).descending()
         );
     }
+
+    public static long dollarToPennies(BigDecimal usdAmount) {
+        var pennies = usdAmount.multiply(new BigDecimal(100)).setScale(0, RoundingMode.HALF_UP);
+        return pennies.longValueExact();
+    }
+
 }

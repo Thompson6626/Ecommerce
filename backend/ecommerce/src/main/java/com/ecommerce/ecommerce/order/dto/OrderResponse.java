@@ -15,6 +15,5 @@ public record OrderResponse(
         @JsonFormat(pattern = "dd-MM-yyyy")
         LocalDate orderDate,
         BigDecimal totalPrice
-
 ) {
 }

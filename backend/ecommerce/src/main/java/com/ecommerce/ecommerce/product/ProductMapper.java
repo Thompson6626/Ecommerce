@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import com.ecommerce.ecommerce.product.dto.ProductDisplay;
 import com.ecommerce.ecommerce.product.dto.ProductShowcase;
 
-import java.math.BigDecimal;
-
 @Service
 public class ProductMapper {
 

@@ -2,7 +2,6 @@ package com.ecommerce.ecommerce.config;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import com.ecommerce.ecommerce.product.Product;
@@ -74,7 +73,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         var adminUser = User.builder()
                 .firstName("Admin")
                 .lastName("User")
-                .password(passwordEncoder.encode("admin"))
+                .password(passwordEncoder.encode("adminnnnnnnnnn"))
                 .email("admin@example.com")
                 .roles(Arrays.asList(adminRole))
                 .enabled(true)
@@ -101,6 +100,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 .email("seller@example.com")
                 .enabled(true)
                 .build();
+        userRepository.save(sellerUser);
+
         var sellerUser2 = User.builder()
                 .firstName("Seller2")
                 .lastName("User2")
@@ -109,6 +110,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 .email("seller2@example.com")
                 .enabled(true)
                 .build();
+        userRepository.save(sellerUser2);
+
         var sellerUser3 = User.builder()
                 .firstName("Seller3")
                 .lastName("User3")
@@ -117,10 +120,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 .email("seller3@example.com")
                 .enabled(true)
                 .build();
+        userRepository.save(sellerUser3);
+
+
 
         createSampleCategoriesAndProducts(sellerUser,sellerUser3,sellerUser2);
-
-        userRepository.save(sellerUser);
 
         alreadySetup = true;
     }
@@ -136,7 +140,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    private Role createRoleIfNotFound(String name, Collection<Privilege> privileges) {
+    private Role createRoleIfNotFound(String name, List<Privilege> privileges) {
         return roleRepository.findByName(name)
                                 .orElseGet(() -> {
                                     var newRole = new Role();

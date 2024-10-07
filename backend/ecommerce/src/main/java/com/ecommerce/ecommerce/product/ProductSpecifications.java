@@ -5,12 +5,14 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.ecommerce.ecommerce.product.category.Category;
+
 import java.math.BigDecimal;
 
 public class ProductSpecifications {
-    public static Specification<Product> hasCategory(String category) {
+    public static Specification<Product> hasCategory(Category category) {
         return (Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
-            if (category == null || category.isEmpty()) {
+            if (category == null || category.getName().isBlank()) {
                 return criteriaBuilder.conjunction();  // Always true
             }
             return criteriaBuilder.equal(root.get("category"), category);

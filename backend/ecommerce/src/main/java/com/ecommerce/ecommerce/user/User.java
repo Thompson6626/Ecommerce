@@ -14,6 +14,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import java.util.stream.Collectors;
+
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -27,7 +29,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@ToString
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
 public class User implements Principal, UserDetails {
@@ -46,16 +47,16 @@ public class User implements Principal, UserDetails {
     private boolean accountLocked;
     private boolean enabled;
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Order> orders;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Order> orders; 
 
-    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Product> products;
 
-    @ManyToMany 
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable( 
         name = "users_roles", 
         joinColumns = @JoinColumn(
@@ -67,7 +68,7 @@ public class User implements Principal, UserDetails {
                 referencedColumnName = "id"
         )
     )
-    private Collection<Role> roles;
+    private List<Role> roles;
 
     @CreatedDate
     @Column(nullable = false , updatable = false)
@@ -134,4 +135,22 @@ public class User implements Principal, UserDetails {
     public String getName() {
         return email;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", accountLocked=" + accountLocked +
+                ", enabled=" + enabled +
+                ", createdDate=" + createdDate +
+                ", lastModifiedDate=" + lastModifiedDate +
+                ", roles=" + roles.stream().map(Role::getName).collect(Collectors.toList()) + 
+                '}';
+    }
+
+
+
 }

@@ -7,8 +7,6 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,7 +14,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -50,17 +47,6 @@ public class BeansConfig {
     @Bean
     public JavaMailSender javaMailSender() {
         return new JavaMailSenderImpl();
-    }
-    @Bean
-    public RoleHierarchy roleHierarchy() {
-        var hierarchy = "ROLE_ADMIN > ROLE_SELLER \n ROLE_SELLER > ROLE_BUYER";
-        return RoleHierarchyImpl.fromHierarchy(hierarchy);
-    }
-    @Bean
-    public DefaultWebSecurityExpressionHandler customWebSecurityExpressionHandler() {
-        var expressionHandler = new DefaultWebSecurityExpressionHandler();
-        expressionHandler.setRoleHierarchy(roleHierarchy());
-        return expressionHandler;
     }
     @Bean
     public AuditorAware<User> auditorAware() {

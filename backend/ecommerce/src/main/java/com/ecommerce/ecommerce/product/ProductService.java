@@ -50,7 +50,7 @@ public class ProductService {
         Category cat = categoryRepository.findByName(category)
                         .orElseThrow(() -> new CategoryNotFoundException(Identifier.CATEGORY,category));
 
-        Specification<Product> spec = Specification.where(ProductSpecifications.hasCategory(category))
+        Specification<Product> spec = Specification.where(ProductSpecifications.hasCategory(cat))
                 .and(ProductSpecifications.hasStatus(ProductStatus.APPROVED));
 
         Page<Product> products = productRepository.findAll(spec,pageable);
@@ -140,7 +140,7 @@ public class ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(Identifier.ID,productId));
 
-        if (!product.getSeller().getId().equals(user.getId()) ||
+        if (!product.getSeller().getId().equals(user.getId()) &&
             user.getRoles().stream().noneMatch(role -> role.getName().equals("ROLE_ADMIN"))
         ){
             throw new UnauthorizedModificationException();

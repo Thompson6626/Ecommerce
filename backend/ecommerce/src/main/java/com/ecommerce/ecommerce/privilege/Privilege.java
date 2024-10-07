@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -22,7 +23,14 @@ public class Privilege  {
 
     private String name;
 
-    @ManyToMany(mappedBy = "privileges")
+    @ManyToMany(mappedBy = "privileges",fetch = FetchType.EAGER)
     private List<Role> roles;
-
+    @Override
+    public String toString() {
+        return "Privilege{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", roles=" + roles.stream().map(Role::getName).collect(Collectors.toList()) + 
+                '}';
+    }
 }
