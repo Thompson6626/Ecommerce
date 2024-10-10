@@ -30,6 +30,7 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final StripeService stripeService;
 
+    // The order should only be saved or put to be persisted only after a successful transaction from stripe
     public PaymentResponse makeOrder(OrderRequest request, User user) throws StripeException {
         Order order = orderMapper.toOrder(request);
         order.setUser(user);

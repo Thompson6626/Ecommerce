@@ -2,6 +2,9 @@
 .idx
 .vscode
 
+# For the moment
+/docker 
+/frontend
 # Gradle
 HELP.md
 .gradle

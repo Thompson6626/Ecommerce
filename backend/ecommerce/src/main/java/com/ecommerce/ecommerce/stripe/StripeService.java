@@ -1,7 +1,6 @@
 package com.ecommerce.ecommerce.stripe;
 
 import com.ecommerce.ecommerce.order.Order;
-import com.ecommerce.ecommerce.order.dto.OrderResponse;
 import com.ecommerce.ecommerce.utils.Utils;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -48,7 +47,7 @@ public class StripeService {
         return order.getOrderItems().stream()
             .map(oi -> 
                  LineItem.builder()
-                .setQuantity((long) oi.getQuantity())  // Prefer to avoid casting if possible
+                .setQuantity(oi.getQuantity().longValue())  
                 .setPriceData(
                     PriceData.builder()
                         .setCurrency("usd")
@@ -64,8 +63,5 @@ public class StripeService {
             )
             .collect(Collectors.toList());
     }
-
-
-
 
 }

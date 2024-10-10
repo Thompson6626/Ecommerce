@@ -1,0 +1,50 @@
+spring:
+    datasource:
+        url: ${DATABASE_URL}
+        username: ${DATABASE_USERNAME}
+        password: ${DATABASE_PASSWORD}
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        hibernate:
+            ddl-auto: validate
+        show-sql: false
+        properties:
+            format_sql: false
+        database: postgresql
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+    mail:
+      host: smtp.your-email-provider.com # Change to a production mail server
+      port: 587 # Use secure SMTP port
+      username: ${MAIL_USERNAME}
+      password: ${MAIL_PASSWORD}
+      properties:
+         mail:
+            smtp:
+               auth: true
+               starttls:
+                  enabled: true
+            connectiontimeout: 5000
+            timeout: 3000
+            writetimeout: 5000
+
+application:
+   security:
+      jwt:
+         secret-key: ${JWT_SECRET_KEY} 
+         expiration: 86400000
+         refresh-token:
+            expiration: 604800000
+   mailing:
+      frontend:
+         activation-url: https://production-url/activate-account
+
+token:
+   expiration-minutes: 15
+   chars: 0123456789
+
+stripe:
+   public-key: ${STRIPE_PUBLIC_KEY}
+   secret-key: ${STRIPE_SECRET_KEY} 
+
+server:
+   port: 8088
