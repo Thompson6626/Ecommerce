@@ -1,0 +1,15 @@
+# Ignore Gradle-specific files and directories
+.gradle/
+build/
+!build/libs/*.jar # Allow only the final jar to be copied from build
+
+# Ignore temporary files and logs
+*.log
+*.tmp
+
+# Ignore Git files
+.git
+.gitignore
+
+# Ignore environment files
+.env

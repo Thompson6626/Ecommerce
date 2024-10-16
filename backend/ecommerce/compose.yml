@@ -1,0 +1,57 @@
+version: '1.0'
+
+services:
+   postgres:
+      container_name: postgres-sql-bsn
+      image: postgres
+      environment:
+         POSTGRES_USER: username
+         POSTGRES_PASSWORD: password
+         PGDATA: /var/lib/postgresql/data
+         POSTGRES_DB: shop
+      volumes:
+         - postgres:/data/postgres
+      ports:
+         - 5432:5432
+      networks:
+         - spring-demo
+      restart: unless-stopped
+   mail-dev:
+      container_name: mail-dev-bsn
+      image: maildev/maildev
+      ports:
+         - 1080:1080
+         - 1025:1025
+   spring-app:
+    container_name: spring-boot-app-bsn
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DATABASE_URL: jdbc:postgresql://postgres-sql-bsn:5432/shop
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      MAIL_HOST_NAME: ${MAIL_HOST_NAME}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+    ports:
+      - 8088:8088
+    networks:
+      - spring-demo
+    depends_on:
+      - postgres
+      - mail-dev
+    restart: unless-stopped
+
+
+networks:
+   spring-demo:
+      driver: bridge
+
+volumes:
+   postgres:
+      driver: local

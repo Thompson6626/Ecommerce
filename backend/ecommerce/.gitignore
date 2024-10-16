@@ -1,5 +1,8 @@
 .env
 
+# For now
+Dockerfile
+
 ### STS ###
 .apt_generated
 .classpath
