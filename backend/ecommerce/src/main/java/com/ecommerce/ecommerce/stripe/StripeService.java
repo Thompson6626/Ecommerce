@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 public class StripeService {
 
-    @Value("${STRIPE_SECRET_KEY}")
+    @Value("${stripe.secret-key}")
     private String stripeSecretKey;
 
     public PaymentResponse createPaymentIntent(

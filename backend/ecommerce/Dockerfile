@@ -14,7 +14,7 @@ COPY src /app/src
 
 # Run Gradle to clean up any previous builds and package the app into a .jar file. 
 # We're skipping tests here to make the build faster.
-RUN gradle clean build -x test
+RUN gradle clean build --no-daemon --quiet
 
 # Now we switch to a much smaller runtime image. 
 # Amazon Corretto is a lightweight version of OpenJDK and a great fit for running Java apps.

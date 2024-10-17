@@ -22,6 +22,7 @@ services:
       ports:
          - 1080:1080
          - 1025:1025
+   
    spring-app:
     container_name: spring-boot-app-bsn
     build:

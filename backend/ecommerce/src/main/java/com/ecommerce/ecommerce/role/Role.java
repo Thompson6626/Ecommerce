@@ -23,7 +23,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@ToString
 public class Role {
 
     @Id

@@ -1,0 +1,54 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE  # In-memory H2 database
+    username: sa  # Default username for H2
+    password: ""  # No password for H2
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop  # Automatically create and drop schema on each test run
+    show-sql: true  # Show SQL queries in the console
+    properties:
+      format_sql: true
+    database-platform: org.hibernate.dialect.H2Dialect  # H2 dialect for Hibernate
+  mail:
+    host: localhost
+    port: 1025
+    username: tm
+    password: tm
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+          auth: true
+          starttls:
+            enabled: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
+application:
+  security:
+    jwt:
+      secret-key: test-secret-key  # Use a test secret key
+      expiration: 86400000
+      refresh-token:
+        expiration: 604800000
+  mailing:
+    frontend:
+      activation-url: http://localhost:4200/activate-account
+
+token:
+  expiration-minutes: 15
+  chars: 0123456789
+
+stripe:
+  public-key: test-public-key  # Use a test public key
+  secret-key: test-secret-key   # Use a test secret key
+
+server:
+  port: 8088
+
+logging:
+  level:
+    org.springframework.security: TRACE
